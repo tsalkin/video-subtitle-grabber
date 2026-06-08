@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#1a1a2e;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#e0e0e0;}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#444;border-radius:2px}
+#hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:#16213e;border-bottom:1px solid #2a2a4a;gap:6px;}
+.htitle{font-weight:700;font-size:13px;color:#a0c4ff;white-space:nowrap;}
+.hbtns{display:flex;gap:6px;align-items:center;}
+#body{padding:10px;display:flex;flex-direction:column;gap:8px;}
+.card{display:flex;flex-direction:column;border-radius:10px;border:1px solid #2a2a4a;overflow:hidden;background:#16213e;}
+.thumb{position:relative;width:100%;aspect-ratio:16/9;background:#0c1628;display:flex;align-items:center;justify-content:center;}
+.ph{font-size:30px;opacity:.2;color:#fff;}
+.dur{position:absolute;bottom:6px;left:7px;background:rgba(0,0,0,.82);color:#fff;font-size:11px;font-weight:700;padding:2px 6px;border-radius:4px;line-height:1.5;}
+.right{min-width:0;padding:9px 10px;display:flex;flex-direction:column;gap:6px;}
+.top-row{display:flex;flex-direction:row;gap:5px;align-items:center;}
+.badge-link{display:inline-flex;align-items:center;gap:2px;font-size:11px;font-weight:600;background:#0f3460;padding:4px 9px;border-radius:7px;color:#a0c4ff;text-decoration:none;white-space:nowrap;flex-shrink:0;}
+.badge-link:hover{background:#1a5090;}
+.badge{font-size:11px;font-weight:600;background:#0f3460;padding:4px 9px;border-radius:7px;color:#a0c4ff;flex-shrink:0;}
+.subs-row{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;flex:1;min-width:0;}
+.title{font-size:12px;font-weight:700;color:#ddd;line-height:1.4;word-break:break-word;}
+.nosub{font-size:10px;color:#555;font-style:italic;align-self:center;}
+.errtxt{font-size:10px;color:#ff7070;align-self:center;}
+.dl-btn{flex:1;min-width:0;background:#1a8a50;color:#fff;border:none;border-radius:7px;padding:4px 8px;cursor:pointer;font-size:11px;font-weight:600;text-align:center;font-family:inherit;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.dl-btn:hover{background:#22a860;}
+.btn-all{background:#1a8a50;color:#fff;border:none;border-radius:6px;padding:3px 9px;cursor:pointer;font-size:11px;font-weight:600;font-family:inherit;}
+.btn-all:hover:not(:disabled){background:#22a860;}
+.btn-x{background:none;border:none;color:#aaa;cursor:pointer;font-size:17px;padding:0 3px;line-height:1;font-family:inherit;}
+.btn-x:hover{color:#fff;}
+.btn-mode{background:#0f3460;border:none;color:#a0c4ff;cursor:pointer;font-size:11px;font-weight:600;padding:3px 9px;border-radius:6px;font-family:inherit;white-space:nowrap;}
+.btn-mode:hover{background:#1a5090;}
+/* Компактный режим: без превью */
+body.compact .thumb{display:none;}
+body.compact .card{min-height:0;}
+body.compact .right{padding:7px 10px;}
+/* Update banner */
+#banner{display:none;align-items:center;gap:8px;padding:7px 12px;background:#143d2a;border-bottom:1px solid #1a8a50;font-size:11px;color:#9fe6bf;}
+#banner a{margin-left:auto;background:#1a8a50;color:#fff;text-decoration:none;padding:3px 9px;border-radius:6px;font-weight:700;white-space:nowrap;}
+#banner a:hover{background:#22a860;}
+/* Footer */
+#footer{display:flex;align-items:center;gap:6px;padding:7px 10px;background:#16213e;border-top:1px solid #2a2a4a;font-size:10px;}
+#ver{color:#667;white-space:nowrap;}
+.fbtns{display:flex;gap:5px;margin-left:auto;flex-wrap:wrap;justify-content:flex-end;}
+.fbtn{background:none;border:1px solid #2a3a5a;color:#9ab;cursor:pointer;font-size:10px;padding:3px 7px;border-radius:6px;font-family:inherit;white-space:nowrap;}
+.fbtn:hover{background:#0f3460;color:#a0c4ff;}
+/* Overlay (About / What's new) */
+#overlay{display:none;padding:14px;font-size:12px;line-height:1.55;color:#cdd;}
+#overlay h2{font-size:14px;color:#a0c4ff;margin-bottom:8px;}
+#overlay h3{font-size:12px;color:#a0c4ff;margin:10px 0 4px;}
+#overlay p{margin:0 0 8px;}
+#overlay a{color:#7fd1ff;}
+#overlay .disc{font-size:10.5px;color:#889;border-left:2px solid #2a3a5a;padding-left:8px;margin-top:8px;}
+#overlay ul{margin:2px 0 8px 16px;}
+#overlay li{margin:2px 0;}
+#overlay .vtag{color:#9fe6bf;font-weight:700;}
+.linkbtn{display:inline-block;margin-top:6px;background:#0f3460;color:#a0c4ff;text-decoration:none;padding:6px 12px;border-radius:7px;font-weight:600;}
+.linkbtn:hover{background:#1a5090;}
+.updrow{margin-top:10px;}
+.updrow button{background:#0f3460;border:1px solid #1a5276;color:#a0c4ff;cursor:pointer;font-size:11px;padding:5px 10px;border-radius:7px;font-family:inherit;}
+.updrow button:hover{background:#1a5276;}
+.updstatus{margin-top:6px;color:#9ab;}
+</style>
+</head>
+<body>
+<div id="hdr">
+  <span class="htitle">🎬 <span id="vcount-label"></span>: <span id="vcount">0</span></span>
+  <div class="hbtns">
+    <button id="btn-mode" class="btn-mode"></button>
+    <button id="dl-all" class="btn-all" disabled style="opacity:.35"></button>
+    <button id="btn-close" class="btn-x" title="">✕</button>
+  </div>
+</div>
+<div id="banner"></div>
+<div id="body"></div>
+<div id="overlay"></div>
+<div id="footer">
+  <span id="ver"></span>
+  <span class="fbtns">
+    <button id="btn-about" class="fbtn"></button>
+    <button id="btn-new" class="fbtn"></button>
+    <button id="btn-lang" class="fbtn" title=""></button>
+  </span>
+</div>
+<script src="i18n.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>

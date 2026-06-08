@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Video Subtitle Grabber",
-  "version": "2.2.0",
-  "description": "Находит видео на странице и позволяет скачать субтитры",
+  "version": "2.5.0",
+  "description": "Lists media embedded on the current page and lets you save available subtitle/caption tracks for personal use.",
   "permissions": ["activeTab", "scripting", "downloads"],
   "host_permissions": [
     "https://player.vimeo.com/*",
@@ -21,11 +21,16 @@
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
-      "css": ["styles.css"],
       "run_at": "document_idle"
     }
   ],
   "background": {
     "service_worker": "background.js"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["panel.html", "panel.js", "i18n.js"],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }
