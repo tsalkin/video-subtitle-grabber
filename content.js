@@ -51,15 +51,16 @@
         var u = e.name || '';
         if (!/\.m3u8(\?|$)/i.test(u)) return;
         if (/vimeo|youtube|googlevideo|ytimg/i.test(u)) return; // handled elsewhere
-        var key = u.split('?')[0];
+        // Subtitles live in the master playlist — normalize variants (playlist_N.m3u8)
+        // to the master (playlist.m3u8) and dedupe so each video shows once.
+        var master = u.replace(/playlist_\d+\.m3u8/i, 'playlist.m3u8');
+        var key = master.split('?')[0];
         if (seen[key]) return;
         seen[key] = 1;
-        out.push(u);
+        out.push(master);
       });
     } catch (e) {}
-    // Prefer master playlists; fall back to the first few if naming is unknown.
-    var masters = out.filter(function (u) { return /master|playlist\.m3u8/i.test(u); });
-    return (masters.length ? masters : out).slice(0, 4);
+    return out.slice(0, 8);
   }
 
   function findThumbInPage(videoId, iframe) {

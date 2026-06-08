@@ -43,7 +43,11 @@ async function fetchHls(url, title) {
     if (!r.ok) return { error: `HTTP ${r.status}`, tracks: [] };
     const text = await r.text();
     if (!/#EXTM3U/.test(text)) return { error: 'not m3u8', tracks: [] };
-    return { tracks: parseHlsSubs(text, url, title || 'subtitles') };
+    const tracks = parseHlsSubs(text, url, title || 'subtitles');
+    // Circle.so / Bunny CDN expose a poster at the video root (…/{id}/thumbnail.jpg);
+    // the playlist's path token also authorizes it. Harmless 404 elsewhere.
+    const thumbUrl = url.replace(/\/hls\/playlist[^/]*\.m3u8/i, '/thumbnail.jpg');
+    return { tracks, thumbUrl: thumbUrl !== url ? thumbUrl : null };
   } catch (e) {
     return { error: e.message, tracks: [] };
   }

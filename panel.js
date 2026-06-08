@@ -258,10 +258,13 @@
       }
       if (v.platform === 'hls') {
         sendBg({ action: 'fetchHls', url: v.url, title: v.title }, function (res) {
+          if (res && res.thumbUrl) setThumb(idx, res.thumbUrl);
           if (res && res.error && !(res.tracks && res.tracks.length)) {
             setSubs(idx, '<span class="errtxt">' + t('error') + ': ' + esc(res.error) + '</span>');
+          } else if (res && res.tracks && res.tracks.length) {
+            renderTracks(idx, res.tracks, all);
           } else {
-            renderTracks(idx, (res && res.tracks) || [], all);
+            setSubs(idx, '<span class="nosub">' + t('hlsNoSubs') + '</span>');
           }
           done();
         });

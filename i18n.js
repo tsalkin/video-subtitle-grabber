@@ -11,6 +11,7 @@
       full: '▦ Полный',
       loading: 'Загружаю…',
       noSubs: 'Субтитры не найдены',
+      hlsNoSubs: 'В этом видео нет дорожек субтитров',
       emptyHint: 'Видео не найдено. Начните просмотр (нажмите Play) — и оно появится здесь.',
       ytHint: 'YouTube: используйте yt-dlp',
       error: 'Ошибка',
@@ -45,6 +46,7 @@
       full: '▦ Full',
       loading: 'Loading…',
       noSubs: 'No subtitles found',
+      hlsNoSubs: 'This video has no subtitle tracks',
       emptyHint: 'No video found. Start playback (press Play) — it will then appear here.',
       ytHint: 'YouTube: use yt-dlp',
       error: 'Error',
@@ -76,6 +78,11 @@
 
   // Last few versions for the "What's new" view (newest first).
   var CHANGELOG = [
+    {
+      version: '2.5.2', date: '2026-06-08',
+      ru: ['HLS: детект master-плейлиста (субтитры берутся оттуда)', 'Превью для видео Circle.so (thumbnail.jpg)', 'Честное сообщение «нет дорожек субтитров»'],
+      en: ['HLS: master playlist detection (subtitles come from there)', 'Thumbnails for Circle.so videos (thumbnail.jpg)', 'Clear “no subtitle tracks” message']
+    },
     {
       version: '2.5.1', date: '2026-06-08',
       ru: ['Кнопка переключения языка в попапе (клик по иконке)', 'Исправлена обрезка нижних строк в разделе «О плагине» (скролл + закреплённый футер)', 'Русское описание на GitHub (README.ru.md)'],
