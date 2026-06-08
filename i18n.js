@@ -79,6 +79,11 @@
   // Last few versions for the "What's new" view (newest first).
   var CHANGELOG = [
     {
+      version: '2.6.0', date: '2026-06-08',
+      ru: ['YouTube: распознавание страниц watch + реальное скачивание субтитров (из ytInitialPlayerResponse)', 'Ссылка на источник для HLS-карточек', 'Подсказка: HLS-видео появляются после запуска (Play)'],
+      en: ['YouTube: watch-page detection + real subtitle download (from ytInitialPlayerResponse)', 'Source link on HLS cards', 'Note: HLS videos appear after playback starts (Play)']
+    },
+    {
       version: '2.5.2', date: '2026-06-08',
       ru: ['HLS: детект master-плейлиста (субтитры берутся оттуда)', 'Превью для видео Circle.so (thumbnail.jpg)', 'Честное сообщение «нет дорожек субтитров»'],
       en: ['HLS: master playlist detection (subtitles come from there)', 'Thumbnails for Circle.so videos (thumbnail.jpg)', 'Clear “no subtitle tracks” message']

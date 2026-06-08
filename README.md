@@ -2,7 +2,7 @@
 
 > Browser extension for Chrome/Edge that lists media embedded on the current page and lets you save the **subtitle / caption tracks your browser has already loaded** — for personal use (accessibility, offline reading, translation, study).
 
-![Version](https://img.shields.io/badge/version-2.5.2-blue)
+![Version](https://img.shields.io/badge/version-2.6.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![Browsers](https://img.shields.io/badge/browsers-Chrome%20%7C%20Edge-orange)
 
@@ -46,7 +46,8 @@
 |----------|-----------|-----------|----------|
 | Vimeo (public) | ✅ | ✅ | ✅ |
 | Vimeo (embedded) | ✅ | ✅ | ✅ |
-| YouTube | ℹ️ use yt-dlp | ✅ | — |
+| YouTube (watch page) | ✅ | ✅ | — |
+| YouTube (embed) | ℹ️ use yt-dlp | ✅ | — |
 | HTML5 `<video>` | ✅ | ✅ (poster) | — |
 | HLS / m3u8 (e.g. Circle.so) | ✅ | — | — |
 

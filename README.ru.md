@@ -2,7 +2,7 @@
 
 > Расширение для Chrome/Edge, которое показывает медиа, встроенное в открытую веб-страницу, и помогает сохранить **дорожки субтитров/титров, уже загруженные вашим браузером** — для личного использования (доступность, офлайн-чтение, перевод, изучение языков).
 
-![Version](https://img.shields.io/badge/version-2.5.2-blue)
+![Version](https://img.shields.io/badge/version-2.6.0-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![Browsers](https://img.shields.io/badge/browsers-Chrome%20%7C%20Edge-orange)
 
@@ -48,7 +48,8 @@
 |-----------|----------|--------|--------------|
 | Vimeo (публичные) | ✅ | ✅ | ✅ |
 | Vimeo (встроенные) | ✅ | ✅ | ✅ |
-| YouTube | ℹ️ используйте yt-dlp | ✅ | — |
+| YouTube (watch-страница) | ✅ | ✅ | — |
+| YouTube (embed) | ℹ️ используйте yt-dlp | ✅ | — |
 | HTML5 `<video>` | ✅ | ✅ (постер) | — |
 | HLS / m3u8 (напр. Circle.so) | ✅ | — | — |
 

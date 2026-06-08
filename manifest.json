@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Video Subtitle Grabber",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "description": "Lists media embedded on the current page and lets you save available subtitle/caption tracks for personal use.",
   "permissions": ["activeTab", "scripting", "downloads"],
   "host_permissions": [

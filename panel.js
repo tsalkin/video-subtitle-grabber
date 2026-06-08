@@ -217,7 +217,8 @@
   function buildCard(v, idx) {
     var pl = { vimeo: '🟦 Vimeo', youtube: '🔴 YouTube', native: '⬛ HTML5', hls: '🟩 HLS' }[v.platform] || v.platform;
     var link = v.platform === 'vimeo' ? 'https://player.vimeo.com/video/' + v.id
-             : v.platform === 'youtube' ? 'https://www.youtube.com/watch?v=' + v.id : '';
+             : v.platform === 'youtube' ? 'https://www.youtube.com/watch?v=' + v.id
+             : v.platform === 'hls' ? v.url : '';
     var badge = link ? '<a class="badge-link" href="' + link + '" target="_blank">' + pl + ' ↗</a>'
                      : '<span class="badge">' + pl + '</span>';
     return '<div class="card">'
@@ -248,8 +249,9 @@
 
     videos.forEach(function (v, idx) {
       if (v.platform === 'youtube') {
-        setThumb(idx, 'https://img.youtube.com/vi/' + v.id + '/mqdefault.jpg');
-        setSubs(idx, '<span class="nosub">' + t('ytHint') + '</span>');
+        setThumb(idx, v.pageThumb || 'https://img.youtube.com/vi/' + v.id + '/mqdefault.jpg');
+        if (v.tracks && v.tracks.length) renderTracks(idx, v.tracks, all);
+        else setSubs(idx, '<span class="nosub">' + t('ytHint') + '</span>');
         done(); return;
       }
       if (v.platform === 'native') {

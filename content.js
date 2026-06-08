@@ -34,11 +34,67 @@
         tracks: tks.map(function (t) { return { label: t.label || t.srclang, lang: t.srclang, url: t.src, filename: t.srclang + '.vtt' }; })
       });
     });
+    // YouTube watch page: the player isn't an embed iframe — read captions from the page.
+    var yt = getYoutubeWatch();
+    if (yt) videos.push(yt);
     // HLS streams (e.g. Circle.so via cdn-media.circle.so) — subtitles live in the m3u8 master.
     findHlsSources().forEach(function (u, i) {
       videos.push({ platform: 'hls', id: 'hls-' + i, url: u, title: document.title || location.hostname, pageThumb: null });
     });
     return videos;
+  }
+
+  // Detect a YouTube watch page and extract real caption tracks from ytInitialPlayerResponse.
+  function getYoutubeWatch() {
+    var host = location.hostname;
+    var id = null;
+    if (/(^|\.)youtube\.com$/.test(host) && /\/watch/.test(location.pathname)) {
+      id = (location.search.match(/[?&]v=([^&]+)/) || [])[1];
+    } else if (/(^|\.)youtu\.be$/.test(host)) {
+      id = location.pathname.slice(1).split(/[?&/]/)[0];
+    }
+    if (!id) return null;
+
+    var pr = extractJson('ytInitialPlayerResponse');
+    var title = (pr && pr.videoDetails && pr.videoDetails.title) || document.title.replace(/ - YouTube$/, '');
+    var tracks = [];
+    try {
+      var ct = pr.captions.playerCaptionsTracklistRenderer.captionTracks || [];
+      ct.forEach(function (c) {
+        var base = c.baseUrl;
+        if (!base) return;
+        var url = base + (base.indexOf('?') >= 0 ? '&' : '?') + 'fmt=vtt';
+        var lang = c.languageCode || 'sub';
+        var label = (c.name && (c.name.simpleText || (c.name.runs && c.name.runs[0] && c.name.runs[0].text))) || lang;
+        if (c.kind === 'asr') label += ' (auto)';
+        tracks.push({ label: label, lang: lang, url: url, filename: ytFilename(title, id, lang) });
+      });
+    } catch (e) {}
+    return { platform: 'youtube', id: id, title: title, tracks: tracks,
+             pageThumb: 'https://img.youtube.com/vi/' + id + '/mqdefault.jpg' };
+  }
+
+  // Extract a JSON object that follows a marker in the page source (brace-balanced).
+  function extractJson(marker) {
+    var html = document.documentElement.innerHTML;
+    var i = html.indexOf(marker);
+    if (i < 0) return null;
+    i = html.indexOf('{', i);
+    if (i < 0) return null;
+    var depth = 0, inStr = false, esc = false;
+    for (var j = i; j < html.length; j++) {
+      var c = html[j];
+      if (inStr) { if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') inStr = false; }
+      else if (c === '"') inStr = true;
+      else if (c === '{') depth++;
+      else if (c === '}') { depth--; if (depth === 0) { try { return JSON.parse(html.slice(i, j + 1)); } catch (e) { return null; } } }
+    }
+    return null;
+  }
+
+  function ytFilename(title, id, lang) {
+    var safe = (title || 'youtube').replace(/[\\/:*?"<>|]/g, '-').trim();
+    return safe + ' [' + id + '].' + (lang || 'sub') + '.vtt';
   }
 
   // Discover HLS master playlists already loaded by the page (no extra permissions).
