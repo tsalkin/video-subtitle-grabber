@@ -26,7 +26,14 @@
 
   // ── Parent (content script) comms ─────────────────────────────────────────
   function toParent(m) { parent.postMessage(Object.assign({ _vsg: true }, m), '*'); }
-  function resize() { toParent({ type: 'vsg-resize', height: document.body.scrollHeight + 2 }); }
+  function resize() {
+    // Report the NATURAL total height (chrome + scrollable content). The parent
+    // clamps it to ~92vh; #scroll then scrolls with header/footer pinned.
+    var h = function (id) { var e = document.getElementById(id); return e ? e.offsetHeight : 0; };
+    var scrollEl = document.getElementById('scroll');
+    var content = scrollEl ? scrollEl.scrollHeight : document.body.scrollHeight;
+    toParent({ type: 'vsg-resize', height: h('hdr') + h('banner') + content + h('footer') + 2 });
+  }
 
   document.getElementById('btn-close').onclick = function () { toParent({ type: 'vsg-close' }); };
 

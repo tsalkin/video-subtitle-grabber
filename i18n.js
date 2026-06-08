@@ -77,6 +77,11 @@
   // Last few versions for the "What's new" view (newest first).
   var CHANGELOG = [
     {
+      version: '2.5.1', date: '2026-06-08',
+      ru: ['Кнопка переключения языка в попапе (клик по иконке)', 'Исправлена обрезка нижних строк в разделе «О плагине» (скролл + закреплённый футер)', 'Русское описание на GitHub (README.ru.md)'],
+      en: ['Language switch button in the popup (toolbar icon)', 'Fixed clipped bottom rows in About (scroll + pinned footer)', 'Russian README on GitHub (README.ru.md)']
+    },
+    {
       version: '2.5.0', date: '2026-06-08',
       ru: ['Поддержка HLS-субтитров (Circle.so / cdn-media.circle.so)', 'Парсинг дорожек из m3u8-плейлиста', 'Подсказка «начните просмотр», когда видео не найдено'],
       en: ['HLS subtitle support (Circle.so / cdn-media.circle.so)', 'Subtitle tracks parsed from the m3u8 playlist', '“Start playback” hint when no video is found']
