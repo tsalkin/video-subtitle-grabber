@@ -2,7 +2,7 @@
 
 > Browser extension for Chrome/Edge that lists media embedded on the current page and lets you save the **subtitle / caption tracks your browser has already loaded** — for personal use (accessibility, offline reading, translation, study).
 
-![Version](https://img.shields.io/badge/version-2.6.0-blue)
+![Version](https://img.shields.io/badge/version-2.6.1-blue)
 ![Manifest](https://img.shields.io/badge/manifest-v3-green)
 ![Browsers](https://img.shields.io/badge/browsers-Chrome%20%7C%20Edge-orange)
 

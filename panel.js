@@ -36,6 +36,7 @@
   }
 
   document.getElementById('btn-close').onclick = function () { toParent({ type: 'vsg-close' }); };
+  document.getElementById('btn-refresh').onclick = function () { toParent({ type: 'vsg-rescan' }); };
 
   // ── Static labels (re-applied on language change) ─────────────────────────
   var modeBtn = document.getElementById('btn-mode');
@@ -46,6 +47,7 @@
   function applyStatic() {
     document.getElementById('vcount-label').textContent = t('videos');
     document.getElementById('btn-close').title = t('close');
+    document.getElementById('btn-refresh').title = t('refresh');
     document.getElementById('ver').textContent = 'v' + VSG.version();
     aboutBtn.textContent = t('about');
     newBtn.textContent = t('whatsNew');
@@ -215,10 +217,10 @@
   }
 
   function buildCard(v, idx) {
-    var pl = { vimeo: '🟦 Vimeo', youtube: '🔴 YouTube', native: '⬛ HTML5', hls: '🟩 HLS' }[v.platform] || v.platform;
+    var pl = { vimeo: '🟦 Vimeo', youtube: '🔴 YouTube', native: '⬛ HTML5', hls: '🟩 HLS', sub: '📄 VTT' }[v.platform] || v.platform;
     var link = v.platform === 'vimeo' ? 'https://player.vimeo.com/video/' + v.id
              : v.platform === 'youtube' ? 'https://www.youtube.com/watch?v=' + v.id
-             : v.platform === 'hls' ? v.url : '';
+             : (v.platform === 'hls' || v.platform === 'sub') ? v.url : '';
     var badge = link ? '<a class="badge-link" href="' + link + '" target="_blank">' + pl + ' ↗</a>'
                      : '<span class="badge">' + pl + '</span>';
     return '<div class="card">'
@@ -254,7 +256,7 @@
         else setSubs(idx, '<span class="nosub">' + t('ytHint') + '</span>');
         done(); return;
       }
-      if (v.platform === 'native') {
+      if (v.platform === 'native' || v.platform === 'sub') {
         renderTracks(idx, v.tracks || [], all);
         done(); return;
       }

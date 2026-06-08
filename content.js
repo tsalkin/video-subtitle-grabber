@@ -41,7 +41,33 @@
     findHlsSources().forEach(function (u, i) {
       videos.push({ platform: 'hls', id: 'hls-' + i, url: u, title: document.title || location.hostname, pageThumb: null });
     });
+    // Standalone subtitle files the page has already loaded (e.g. when CC is enabled).
+    findSubtitleFiles().forEach(function (u, i) {
+      var name = decodeURIComponent((u.split('?')[0].split('/').pop()) || ('subtitle-' + (i + 1)));
+      var lang = (name.match(/[._-]([a-z]{2})(?=[._-]|\.vtt|\.srt|$)/i) || [])[1] || 'sub';
+      var ext = /\.srt(\?|$)/i.test(u) ? 'srt' : 'vtt';
+      var fn = /\.(vtt|srt)$/i.test(name) ? name : name + '.' + ext;
+      videos.push({ platform: 'sub', id: 'sub-' + i, url: u, title: name,
+        tracks: [{ label: lang, lang: lang, url: u, filename: fn }] });
+    });
     return videos;
+  }
+
+  // Subtitle files (.vtt/.srt) already fetched by the page's player.
+  function findSubtitleFiles() {
+    var out = [], seen = {};
+    try {
+      (performance.getEntriesByType ? performance.getEntriesByType('resource') : []).forEach(function (e) {
+        var u = e.name || '';
+        if (!/\.(vtt|srt)(\?|$)/i.test(u)) return;
+        if (/timedtext/i.test(u)) return; // YouTube captions handled separately
+        var key = u.split('?')[0];
+        if (seen[key]) return;
+        seen[key] = 1;
+        out.push(u);
+      });
+    } catch (e) {}
+    return out.slice(0, 20);
   }
 
   // Detect a YouTube watch page and extract real caption tracks from ytInitialPlayerResponse.
@@ -139,8 +165,18 @@
   }
 
   // ── Panel (extension-origin iframe: no page CSP, no page CSS) ──────────────
-  function openPanel() {
+  var _lastSig = '';
+
+  function sendVideos(fr, force) {
     var videos = findVideos();
+    var sig = videos.map(function (v) { return v.platform + (v.id || v.url) + ((v.tracks || []).length); }).join('|');
+    if (!force && sig === _lastSig) return;
+    _lastSig = sig;
+    fr.contentWindow.postMessage({ _vsg: true, type: 'vsg-videos', videos: videos }, '*');
+  }
+
+  function openPanel() {
+    _lastSig = '';
     var fr = document.createElement('iframe');
     fr.id = IFRAME_ID;
     fr.src = chrome.runtime.getURL('panel.html');
@@ -150,7 +186,9 @@
     function onMsg(e) {
       if (e.source !== fr.contentWindow || !e.data || !e.data._vsg) return;
       if (e.data.type === 'vsg-ready') {
-        fr.contentWindow.postMessage({ _vsg: true, type: 'vsg-videos', videos: videos }, '*');
+        sendVideos(fr, true);
+      } else if (e.data.type === 'vsg-rescan') {
+        sendVideos(fr, true);
       } else if (e.data.type === 'vsg-resize') {
         fr.style.height = Math.min(e.data.height, window.innerHeight * 0.92) + 'px';
       } else if (e.data.type === 'vsg-close') {
@@ -159,6 +197,25 @@
     }
     fr._onMsg = onMsg;
     window.addEventListener('message', onMsg);
+
+    // Live update: when the page loads new media (m3u8 / vtt) after the panel is
+    // open (e.g. you press Play or scroll), re-scan and push the new list.
+    startResourceWatch();
+  }
+
+  var _po = null, _rescanT = null;
+  function startResourceWatch() {
+    if (_po) return;
+    try {
+      _po = new PerformanceObserver(function () {
+        clearTimeout(_rescanT);
+        _rescanT = setTimeout(function () {
+          var fr = document.getElementById(IFRAME_ID);
+          if (fr) sendVideos(fr, false);
+        }, 500);
+      });
+      _po.observe({ type: 'resource', buffered: false });
+    } catch (e) {}
   }
 
   function closePanel() {

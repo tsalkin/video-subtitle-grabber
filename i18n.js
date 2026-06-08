@@ -16,6 +16,7 @@
       ytHint: 'YouTube: используйте yt-dlp',
       error: 'Ошибка',
       close: 'Закрыть',
+      refresh: 'Обновить список',
       about: 'ℹ О плагине',
       whatsNew: '🆕 Что нового',
       back: '← Назад',
@@ -51,6 +52,7 @@
       ytHint: 'YouTube: use yt-dlp',
       error: 'Error',
       close: 'Close',
+      refresh: 'Refresh list',
       about: 'ℹ About',
       whatsNew: '🆕 What’s new',
       back: '← Back',
@@ -78,6 +80,11 @@
 
   // Last few versions for the "What's new" view (newest first).
   var CHANGELOG = [
+    {
+      version: '2.6.1', date: '2026-06-08',
+      ru: ['Живое обновление списка: новые видео появляются после Play/прокрутки (без переоткрытия)', 'Кнопка ↻ «Обновить список» в шапке', 'Детект отдельных файлов субтитров (.vtt/.srt), загружаемых при включении CC'],
+      en: ['Live list updates: new videos appear after Play/scroll (no reopen needed)', '↻ “Refresh list” button in the header', 'Detect standalone subtitle files (.vtt/.srt) loaded when CC is enabled']
+    },
     {
       version: '2.6.0', date: '2026-06-08',
       ru: ['YouTube: распознавание страниц watch + реальное скачивание субтитров (из ytInitialPlayerResponse)', 'Ссылка на источник для HLS-карточек', 'Подсказка: HLS-видео появляются после запуска (Play)'],
